@@ -8,7 +8,7 @@ const run = (cmd, opts = {}) => { console.log('\n> ' + cmd); execSync(cmd, { std
 const win = process.platform === 'win32';
 
 if (!existsSync('node_modules')) run('npm install');
-run('npm run icons');
+try { run('npm run icons'); } catch (e) { console.warn('Иконки не сгенерированы, будет иконка по умолчанию'); }
 if (!existsSync('android')) run('npx cap add android');
 
 // Только вертикальная ориентация
