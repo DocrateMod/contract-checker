@@ -4,7 +4,7 @@
   "private": true,
   "description": "Проверка договоров — Android-оболочка (Capacitor)",
   "scripts": {
-    "icons": "capacitor-assets generate --android --iconBackgroundColor #0b6fb8 --iconBackgroundColorDark #0b1f33",
+    "icons": "capacitor-assets generate --android --iconBackgroundColor \"#0b6fb8\" --iconBackgroundColorDark \"#0b1f33\"",
     "build:apk": "node scripts/build-apk.mjs"
   },
   "dependencies": {
