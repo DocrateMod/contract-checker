@@ -1,0 +1,19 @@
+{
+  "name": "contract-checker",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Проверка договоров — Android-оболочка (Capacitor)",
+  "scripts": {
+    "icons": "capacitor-assets generate --android --iconBackgroundColor #0b6fb8 --iconBackgroundColorDark #0b1f33",
+    "build:apk": "node scripts/build-apk.mjs"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.0.0",
+    "@capacitor/app": "^7.0.0",
+    "@capacitor/core": "^7.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^7.0.0"
+  }
+}

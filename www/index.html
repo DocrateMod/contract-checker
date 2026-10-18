@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="theme-color" content="#eef3f8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Договоры">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%23fff' stroke='%230b6fb8' stroke-width='8'/%3E%3Cpath d='M18 33l10 10 18-22' fill='none' stroke='%2316a34a' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<title>Проверка договоров</title>
+<style>
+:root{color-scheme:light;--bg:#eef3f8;--panel:#ffffff;--panel2:#e4eefa;--line:#a9bbcd;--text:#0b1f33;--mut:#51647a;--sky:#0b6fb8;--teal:#0d9488;--amber:#c2670a;--green:#15803d;--red:#c62828;--mono:ui-monospace,"SF Mono",Consolas,"Roboto Mono",monospace;--h:clamp(26px,7.4vw,34px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+button,input{touch-action:manipulation}
+body{-webkit-user-select:none;user-select:none}
+input{-webkit-user-select:text;user-select:text}
+html{background:#eef3f8;overscroll-behavior:none;-webkit-text-size-adjust:100%}
+html,body{margin:0;color:var(--text);font-family:Inter,"SF Pro Display","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+body{min-height:100vh;min-height:100dvh;padding:calc(74px + env(safe-area-inset-top)) max(20px,env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) max(20px,env(safe-area-inset-left));display:flex;flex-direction:column;background-color:#eef3f8;background-image:radial-gradient(ellipse at 50% 0,#ffffff 0,transparent 60%),linear-gradient(rgba(11,111,184,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(11,111,184,.07) 1px,transparent 1px);background-size:auto,32px 32px,32px 32px}
+body::after{content:"SYS · CHK · OK";position:fixed;right:10px;bottom:6px;font:11px var(--mono);letter-spacing:.14em;color:#9fb2c5;pointer-events:none}
+#hd{position:fixed;top:calc(16px + env(safe-area-inset-top));left:max(16px,env(safe-area-inset-left));right:calc(84px + env(safe-area-inset-right));z-index:2}
+#rl{font:600 13px var(--mono);letter-spacing:.1em;color:var(--sky)}
+#rbar{position:relative;height:4px;margin-top:9px;border-radius:2px;background:#cbd7e4}
+#rf{position:relative;display:block;height:100%;border-radius:2px;background:linear-gradient(90deg,var(--teal),var(--sky));transition:width .25s}
+#rf::after{content:"";position:absolute;right:-6px;top:-4px;width:12px;height:12px;border-radius:50%;background:var(--sky);box-shadow:0 0 0 3px rgba(11,111,184,.25)}
+#cnt{position:fixed;top:calc(9px + env(safe-area-inset-top));right:max(12px,env(safe-area-inset-right));z-index:2;min-width:54px;padding:5px 12px;border-radius:8px;border:1px solid var(--line);background:#0b1f33;color:#5eead4;text-align:center;font:700 26px var(--mono);letter-spacing:.06em;box-shadow:inset 0 0 10px rgba(45,212,191,.12)}
+#m{flex:1;width:100%;max-width:620px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+#m.fade{animation:in .18s ease-out}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+h1{margin:0;text-align:center;font-size:var(--h);line-height:1.18;font-weight:700;letter-spacing:-.01em;text-wrap:balance;overflow-wrap:break-word;hyphens:none}
+.ex{text-align:center;font-size:clamp(20px,5.8vw,26px);line-height:1.3;color:#3d5873;text-wrap:balance;overflow-wrap:break-word}
+.warn{text-align:center;background:#a31515;border:2px solid var(--red);border-radius:10px;padding:14px;color:#fff;font-size:clamp(20px,6vw,26px);font-weight:800;letter-spacing:.04em;text-wrap:balance;box-shadow:0 0 0 4px rgba(198,40,40,.2)}
+.circle{width:min(70vw,290px);height:min(70vw,290px);flex:none;border-radius:50%;border:14px solid #a9bbcd;background:var(--panel);margin:6px auto;padding:0;display:flex;align-items:center;justify-content:center;color:var(--mut);font:600 72px var(--mono);box-shadow:inset 0 0 40px rgba(11,111,184,.06)}
+button.circle:hover{border-color:var(--sky)}
+.circle.on{border-color:var(--green);box-shadow:inset 0 0 40px rgba(21,128,61,.1)}
+.circle svg{width:60%;height:60%}
+.gauge{--p:0%;width:104px;height:104px;margin:0 auto;border-radius:50%;display:flex;align-items:center;justify-content:center;font:700 34px var(--mono);color:var(--text);background:radial-gradient(closest-side,var(--panel) 80%,transparent 82%),conic-gradient(var(--sky) var(--p),#cbd7e4 0)}
+.btn{width:100%;min-height:84px;padding:14px 18px;font-family:inherit;font-size:var(--h);font-weight:700;line-height:1.18;letter-spacing:-.01em;color:var(--text);background:var(--panel);border:2px solid var(--line);border-radius:10px;text-wrap:balance;overflow-wrap:break-word;cursor:pointer}
+.btn:hover{border-color:var(--sky);background:var(--panel2)}
+.btn:active{transform:translateY(1px);filter:brightness(1.15)}
+.btn.sel{border-color:var(--sky);background:#d4e8fb}
+.opt-yes{border-left:8px solid var(--teal)}
+.opt-no{border-left:8px solid var(--amber)}
+.btn.go{background:var(--sky);border-color:var(--sky);color:#fff}
+.btn.go:hover{background:#095a96}
+.btn.sec{min-height:56px;font-size:21px;font-weight:600;color:var(--sky);background:transparent}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none;filter:none}
+input{width:100%;min-height:80px;padding:10px 16px;font-family:inherit;font-size:var(--h);font-weight:700;font-variant-numeric:tabular-nums;color:var(--text);background:#fff;border:2px solid var(--line);border-radius:10px}
+input::placeholder{color:#8095aa;font-weight:600}
+input:focus{outline:none;border-color:var(--sky);box-shadow:0 0 0 3px rgba(11,111,184,.25)}
+input.bad{border-color:var(--red)}
+label{display:block;font-size:18px;letter-spacing:.02em;color:var(--mut);margin:0 0 6px}
+.res{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:4px 16px;font-size:clamp(18px,5vw,22px);line-height:1.4}
+.res:empty{display:none}
+.row{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:10px 0;border-bottom:1px solid #dbe5ef}
+.row:last-of-type{border-bottom:0}
+.row span{color:var(--mut)}
+.row b{font-size:1.3em;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.ok,.no,.wait{display:block;margin:10px 0 8px;padding:12px 14px;border-radius:8px;font-weight:800;letter-spacing:.02em;text-wrap:balance}
+.ok{color:var(--green);background:rgba(21,128,61,.1);border:1px solid var(--green)}
+.no,.alert{color:var(--red);background:rgba(198,40,40,.08);border:1px solid var(--red)}
+.wait{color:var(--amber);background:rgba(194,103,10,.1);border:1px solid var(--amber)}
+.alert{border-radius:8px;padding:12px 14px;font-size:22px;font-weight:800}
+.push,.btn.go{margin-top:auto}
+.push~.back,.btn.go~.back{margin-top:0}
+.back{align-self:flex-start;margin-top:auto;min-height:48px;padding:8px 18px;background:none;border:1px solid var(--line);border-radius:8px;color:#3d5873;font:inherit;font-size:19px;cursor:pointer}
+.back:hover{border-color:var(--sky)}
+@media (prefers-reduced-motion:reduce){#m.fade{animation:none}#rf{transition:none}}
+</style>
+</head>
+<body>
+<div id="hd"><div id="rl"></div><div id="rbar"><i id="rf"></i></div></div>
+<div id="cnt">0</div>
+<main id="m"></main>
+<script>
+'use strict';
+/* ---------- Даты (всё в UTC, чтобы не было сдвига из-за часового пояса) ---------- */
+// Нерабочие / исключённые даты: [месяц, день], год любой
+const HOLIDAYS = [[1,2],[1,3],[1,9],[1,10],[2,20],[2,21],[5,1],[5,2]];
+const pad = n => String(n).padStart(2,'0');
+const parseISO = s => { const [y,m,d] = s.split('-').map(Number); return new Date(Date.UTC(y,m-1,d)); };
+const addDays = (d,n) => new Date(d.getTime() + n*86400000);
+const fmtDate = d => pad(d.getUTCDate())+'.'+pad(d.getUTCMonth()+1)+'.'+d.getUTCFullYear();
+const isHoliday = d => HOLIDAYS.some(([m,dd]) => d.getUTCMonth()+1===m && d.getUTCDate()===dd);
+const isWorkday = d => { const w = d.getUTCDay(); return w!==0 && w!==6 && !isHoliday(d); };
+
+/* >>> ПРАВИЛО РАСЧЁТА ДАТЫ ОКОНЧАНИЯ (можно менять здесь) <<<
+   Занятия раз в неделю. Если дата занятия попала в HOLIDAYS, оно не засчитывается
+   и переносится на следующую неделю (счёт идёт дальше с шагом 7 дней). */
+function calcEndDate(startDate, lessons){
+  let d = startDate, done = 0, last = null;
+  while (done < lessons){
+    if (!isHoliday(d)){ done++; last = d; }
+    d = addDays(d,7);
+  }
+  return last;
+}
+// Дата оплаты (маткапитал): +7 календарных дней, затем +15 рабочих дней
+function calcPayDate(startDate){
+  const mid = addDays(startDate,7);
+  let d = mid, left = 15;
+  while (left > 0){ d = addDays(d,1); if (isWorkday(d)) left--; }
+  return {mid, end:d};
+}
+
+/* ---------- Деньги (в копейках, без ошибок float) ---------- */
+function kop(s){
+  s = String(s||'').replace(/\s/g,'').replace(',','.');
+  if (!/^\d+(\.\d{1,2})?$/.test(s)) return null;
+  const [a,b=''] = s.split('.');
+  return Number(a)*100 + Number((b+'00').slice(0,2));
+}
+const rub = k => (k/100).toLocaleString('ru-RU',{minimumFractionDigits:2,maximumFractionDigits:2})+' ₽';
+
+/* ---------- Описание шагов ---------- */
+const MONTHS = ['Сентябрь','Октябрь','Ноябрь','Декабрь','Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август'];
+const hrs = v => v.q2==='Короткий' ? 36 : 68;
+const mat = v => v.q65==='Да';   // маткап: только 9.1
+const ord = v => v.q65==='Нет';  // обычная оплата: 7, 8, 9
+const C = (id,title) => ({id,t:'check',title});
+const Q = (id,title,opts) => ({id,t:'choice',title,opts});
+const T = (id,title,ex) => ({id,t:'check',title,ex:ex||''});
+const STEPS = [
+  C('c0','БЮДЖЕТНОЕ НА АВТОНОМНОЕ'),
+  Q('q1','Новый договор?',['Да','Нет']),
+  Q('q2','Длинный или короткий?',['Длинный','Короткий']),
+  C('c3', v => hrs(v)+' часов'),
+  {id:'d4',t:'date',title:'Дата начала занятий'},
+  C('c5','Начало периода оказания услуг'),
+  C('c6','Конец периода оказания услуг'),
+  Q('q65','МАТКАП?',['Да','Нет']),
+  {id:'m7',t:'months',title:'ОПЛАТА ПОМЕСЯЧНО ПРОВЕРКА',show:ord},
+  {id:'c8',t:'check',title:'Сумма оплаты проверка',show:ord},
+  {id:'pd',t:'paydate',title:'Дата оплаты',show:mat},
+  T('t10','Фамилия инициалы','Смирнов К.П.'),
+  T('t11','Заказчик','Куликов Пётр Филатович'),
+  T('t12','ФАМИЛИЯ'), T('t13','ИМЯ'), T('t14','ОТЧЕСТВО'),
+  T('t15','Телефон','+7 990 992 54 54'),
+  T('t16','Дата рождения','23.08.1998'),
+  T('t17','Паспорт','4565 89 76 23'),
+  T('t18','СЕРИЯ','4565'), T('t19','НОМЕР','89 76 23'),
+  T('t20','Выдан','23.08.1998'),
+  C('c21','Выдан «ЗАГУГЛИТЬ РЕАЛЬНО КАК ПИШЕТСЯ»'),
+  C('c22','Выдан «Проверить весь КАПС и №»'),
+  T('t23','Адрес ИНДЕКС','105 005'),
+  T('t24','Город и тд'),
+  T('t25','КВАРТИРА'),
+  T('t26','Ребёнок','Куликов Пётр Филатович'),
+  T('t27','ФАМИЛИЯ'), T('t28','ИМЯ'), T('t29','ОТЧЕСТВО'),
+  T('t30','Дата рождения','23.08.1998'),
+  T('t31','Паспорт','4565 89 76 23'),
+  T('t32','СЕРИЯ','4565'), T('t33','НОМЕР','89 76 23'),
+  T('t34','Выдан','23.08.1998'),
+  C('c35','Выдан «ЗАГУГЛИТЬ РЕАЛЬНО КАК ПИШЕТСЯ»'),
+  C('c36','Выдан «Проверить весь КАПС и №»'),
+  C('c37','УБРАТЬ НОМЕР'),
+  T('t38','Адрес ИНДЕКС','105 005'),
+  T('t39','Город и тд'),
+  T('t40','КВАРТИРА'),
+  {id:'h41',t:'hours',title:'ЧАСЫ'},
+  T('t42','Расписание','суббота или воскресенье')
+];
+
+/* ---------- Состояние и хранилище ---------- */
+const KS = 'dc_state', KC = 'dc_count';
+const fresh = () => ({cur:0, v:{}, counted:false});
+let S = fresh();  // данные договора живут только в памяти и не сохраняются
+try { localStorage.removeItem(KS); } catch(e){}  // удаляем старые сохранённые данные
+const today = () => { const n = new Date(); return n.getFullYear()+'-'+pad(n.getMonth()+1)+'-'+pad(n.getDate()); };
+function getCount(){
+  try { const c = JSON.parse(localStorage.getItem(KC)); if (c && c.d===today()) return c.n; } catch(e){}
+  return 0;
+}
+function incCount(){ try { localStorage.setItem(KC, JSON.stringify({d:today(), n:getCount()+1})); } catch(e){} }
+const showCount = () => { document.getElementById('cnt').textContent = getCount(); };
+
+/* ---------- Навигация (видимость шагов считается по текущим ответам) ---------- */
+const vis = i => !STEPS[i].show || STEPS[i].show(S.v);
+function next(){ let i = S.cur+1; while (i < STEPS.length && !vis(i)) i++; S.cur = i; FADE = true; render(); }
+function hasPrev(){ for (let i = S.cur-1; i >= 0; i--) if (vis(i)) return true; return false; }
+function prev(){ let i = S.cur-1; while (i >= 0 && !vis(i)) i--; if (i >= 0){ S.cur = i; FADE = true; render(); } }
+
+/* ---------- Помощники интерфейса ---------- */
+let M, FADE = false, POS = 0, TOTAL = 1;
+function el(tag, cls, text, parent){
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text != null) e.textContent = text;
+  (parent || M).appendChild(e);
+  return e;
+}
+const titleOf = st => typeof st.title === 'function' ? st.title(S.v) : st.title;
+const h1 = st => el('h1', null, titleOf(st));
+function go(label, fn){ const b = el('button','btn go',label); b.onclick = fn; return b; }
+const TICK = '<svg viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>';
+const line = (box, label, val) => { box.insertAdjacentHTML('beforeend','<div class="row"><span>'+label+'</span><b>'+val+'</b></div>'); };
+
+const gauge = () => el('div','gauge',String(POS+1)).style.setProperty('--p', Math.round(100*(POS+1)/TOTAL)+'%');
+function showRoute(){
+  document.getElementById('rf').style.width = Math.round(100*POS/TOTAL)+'%';
+  document.getElementById('rl').textContent = S.cur >= STEPS.length ? 'ЗАДАНИЕ ВЫПОЛНЕНО' : 'ЭТАП '+(POS+1)+' / '+TOTAL;
+}
+
+/* ---------- Отрисовщики типов экранов ---------- */
+const R = {
+  // Тип А: индикатор сверху, вопрос под ним
+  check(st){
+    const on = !!S.v[st.id];
+    const b = el('button','circle'+(on?' on':''));
+    b.setAttribute('aria-label','Подтвердить');
+    if (on) b.innerHTML = TICK; else b.textContent = String(POS+1);
+    h1(st);
+    if (st.ex) el('div','ex',st.ex);
+    let busy = false;
+    b.onclick = () => {
+      if (busy) return; busy = true;
+      S.v[st.id] = true;
+      b.classList.add('on'); b.innerHTML = TICK;
+      setTimeout(next, 300);
+    };
+  },
+  // Тип Б
+  choice(st){
+    gauge(); h1(st);
+    st.opts.forEach(o => {
+      const cls = o==='Да' ? ' opt-yes' : o==='Нет' ? ' opt-no' : '';
+      const b = el('button','btn'+cls+(S.v[st.id]===o?' sel':'')+(o===st.opts[0]?' push':''), o);
+      b.onclick = () => { S.v[st.id] = o; next(); };
+    });
+  },
+  // Пункт 4: дата начала и расчёт даты окончания
+  date(st){
+    el('div','warn','⚠ НЕ ДЛЯ ОГЭ / ЕГЭ');
+    h1(st);
+    el('label',null,'Дата начала'); const i = el('input'); i.type = 'date'; i.value = S.v.start || '';
+    const r = el('div','res');
+    const b = go('Подтвердить', next);
+    const u = () => {
+      S.v.start = i.value; b.disabled = !i.value; r.innerHTML = '';
+      if (i.value){
+        const n = hrs(S.v), s = parseISO(i.value);
+        line(r,'Начало',fmtDate(s)); line(r,'Занятий',n); line(r,'Окончание',fmtDate(calcEndDate(s,n)));
+      }
+    };
+    i.oninput = u; i.onchange = u; u();
+  },
+  // Пункт 7: оплата по месяцам
+  months(st){
+    gauge(); h1(st);
+    const m = S.v.months = S.v.months || {};
+    const sum = el('div','res');
+    const upd = () => {
+      let t = 0; MONTHS.forEach(n => { const k = kop(m[n]); if (k) t += k; });
+      sum.innerHTML = ''; line(sum,'Всего',rub(t));
+    };
+    MONTHS.forEach(n => {
+      const w = el('div'); el('label',null,n,w);
+      const i = el('input',null,null,w); i.inputMode = 'decimal'; i.value = m[n] || '';
+      i.oninput = () => { m[n] = i.value; i.classList.toggle('bad', i.value.trim()!=='' && kop(i.value)===null); upd(); };
+    });
+    M.appendChild(sum); upd();
+    go('Подтвердить', next);
+  },
+  // Пункт 9.1: дата оплаты
+  paydate(st){
+    gauge(); h1(st);
+    const r = el('div','res');
+    if (S.v.start){
+      const s = parseISO(S.v.start), p = calcPayDate(s);
+      line(r,'Начало занятий',fmtDate(s)); line(r,'+7 календарных дней',fmtDate(p.mid)); line(r,'+15 рабочих дней',fmtDate(p.end));
+    } else el('div','alert','Не указана дата начала занятий (пункт 4)');
+    go('Подтвердить дату оплаты', next);
+  },
+  // Пункт 41: калькулятор часов (можно вводить частями, сумма сравнивается с 36 / 68)
+  hours(st){
+    gauge(); h1(st);
+    const exp = hrs(S.v), H = S.v.hours = S.v.hours || [];
+    el('label',null,'Часы'); const i = el('input'); i.inputMode = 'decimal'; i.placeholder = 'Часы';
+    const addH = () => {
+      const n = Number(i.value.replace(',','.'));
+      if (i.value.trim()==='' || isNaN(n) || n <= 0){ i.classList.add('bad'); return; }
+      H.push(n); render(); M.querySelector('input').focus();
+    };
+    i.onkeydown = e => { if (e.key==='Enter') addH(); };
+    i.oninput = () => i.classList.remove('bad');
+    el('button','btn','Добавить').onclick = addH;
+    const r = el('div','res');
+    H.forEach((n,k) => line(r,(k+1)+'.',n));
+    const tot = Math.round(H.reduce((a,n) => a+n, 0)*100)/100;
+    line(r,'Сумма часов',tot); line(r,'Ожидается',exp);
+    r.insertAdjacentHTML('beforeend', !H.length ? '<span class="wait">⏳ ТРЕБУЕТ ПРОВЕРКИ</span>' : tot===exp ? '<span class="ok">✓ ПРОВЕРЕНО</span>' : '<span class="no">⚠ НЕ СОВПАДАЕТ · разница '+Math.round(Math.abs(tot-exp)*100)/100+'</span>');
+    const del = el('button','btn sec','Удалить последнее'); del.disabled = !H.length;
+    del.onclick = () => { H.pop(); render(); };
+    const b = go('Далее', next); b.disabled = !H.length;
+  }
+};
+
+/* ---------- Экран завершения ---------- */
+function renderDone(){
+  // Счётчик растёт один раз за договор: флаг counted хранится в состоянии
+  if (!S.counted){ S.counted = true; incCount(); }
+  el('div','circle on').innerHTML = TICK;
+  el('h1',null,'ДОГОВОР ПРОВЕРЕН');
+  el('div','ex','Все этапы выполнены');
+  el('button','btn go','Начать новый договор').onclick = () => { S = fresh(); FADE = true; render(); };
+}
+
+function render(){
+  M = document.getElementById('m');
+  M.className = ''; M.innerHTML = '';
+  if (FADE){ void M.offsetWidth; M.className = 'fade'; FADE = false; }
+  const vs = STEPS.map((x,i) => i).filter(vis);          // видимые шаги выбранной ветки
+  POS = vs.filter(i => i < S.cur).length; TOTAL = vs.length;
+  if (S.cur >= STEPS.length) renderDone();
+  else { const st = STEPS[S.cur]; R[st.t](st); }
+  if (hasPrev()) el('button','back','← Назад').onclick = prev;
+  showRoute(); showCount(); window.scrollTo(0,0);
+}
+render();
+
+/* ---------- Android (Capacitor): кнопка «Назад» = шаг назад, а не закрытие приложения ---------- */
+try {
+  const A = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App;
+  if (A) A.addListener('backButton', () => {
+    if (hasPrev()) prev();                       // назад по этапам, данные сохраняются
+    else if (A.minimizeApp) A.minimizeApp();     // на первом экране просто сворачиваем
+  });
+} catch (e) {}
+</script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+{
+  "appId": "ru.contractchecker.app",
+  "appName": "Проверка договоров",
+  "webDir": "www",
+  "android": { "allowMixedContent": false }
+}
